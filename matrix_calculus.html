@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>matrix_calculus</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="matrix_calculus_files/libs/clipboard/clipboard.min.js"></script>
+<script src="matrix_calculus_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="matrix_calculus_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="matrix_calculus_files/libs/quarto-html/popper.min.js"></script>
+<script src="matrix_calculus_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="matrix_calculus_files/libs/quarto-html/anchor.min.js"></script>
+<link href="matrix_calculus_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="matrix_calculus_files/libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="matrix_calculus_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="matrix_calculus_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="matrix_calculus_files/libs/bootstrap/bootstrap-3c094064661c229875434fdc78bc39d8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+
+<section id="sec-matrix-calculus" class="level1">
+<h1>Matrix Calculus</h1>
+<section id="single-variable-calculus" class="level2">
+<h2 class="anchored" data-anchor-id="single-variable-calculus">Single-variable Calculus</h2>
+<p>We all know how to calculate a derivative in single-variable calculus. If we have an input variable <span class="math inline">\(x \in \mathbb{R}\)</span> and a function <span class="math inline">\(f(x): \mathbb{R} \rightarrow \mathbb{R}\)</span>, then:</p>
+<p><span class="math display">\[
+f'(x) = \frac{f(x + dx) - f(x)}{dx}
+\]</span></p>
+<p>We generally define the numerator as <span class="math inline">\(df = f(x + dx) - f(x)\)</span>, which gives <span class="math inline">\(\frac{df}{dx}\)</span> as our standard derivative. In other words, we can approximate some small change in the function as the derivative times a small change in our input variable:</p>
+<p><span class="math display">\[
+df = \frac{df}{dx} \cdot dx
+\]</span></p>
+<p>We can even, in a very hand-waving way, think of the <span class="math inline">\(dx\)</span>’s canceling out nicely.</p>
+</section>
+<section id="multi-variable-calculus" class="level2">
+<h2 class="anchored" data-anchor-id="multi-variable-calculus">Multi-variable Calculus</h2>
+<p>In multi-variable calculus, we have <span class="math inline">\(x \in \mathbb{R}^n\)</span> and <span class="math inline">\(f(x): \mathbb{R}^n \rightarrow \mathbb{R}^m\)</span>. We will use the following notation, which may seem a bit counter-intuitive at first:</p>
+<p><span class="math display">\[
+df = \frac{df}{dx}^T dx
+\]</span></p>
+<p>We are <strong>intentionally</strong> adding a transpose to the <span class="math inline">\(\frac{df}{dx}\)</span> term. This means that <span class="math inline">\(\frac{df}{dx}\)</span> will be of size <span class="math inline">\((n \times m)\)</span>. The input (<span class="math inline">\(x\)</span>) determines the rows in the derivative, and the output (<span class="math inline">\(f\)</span>) determines the columns in the derivative. In other words:</p>
+<p><span class="math display">\[
+\left(\frac{df}{dx}\right)_{i,j} = \frac{df_j}{dx_i}
+\]</span></p>
+<p>This is called the <strong>denominator layout</strong> convention, and it has been widely adopted by the machine learning community because it ensures that the shape of the gradient is the same as the shape of the respective parameter. This simplifies calculations considerably, as we will see.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Numerator Layout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Numerator Layout
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Some textbooks instead use the <strong>numerator layout</strong>, where <span class="math inline">\(df = \frac{df}{dx} \cdot dx\)</span> without the transpose. In that convention, <span class="math inline">\(\frac{df}{dx}\)</span> is of size <span class="math inline">\((m \times n)\)</span>—the transpose of what we define above. Although it may seem more intuitive at first, it makes chain rule computations more complicated. We will not use numerator layout in this course.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-matrix-derivative" class="level2">
+<h2 class="anchored" data-anchor-id="sec-matrix-derivative">The Shapes of Things</h2>
+<p>Here are the important special cases of the denominator layout convention:</p>
+<ul>
+<li><p>Scalar-by-scalar: For <span class="math inline">\(x\)</span> of size <span class="math inline">\(1\times 1\)</span> and <span class="math inline">\(y\)</span> of size <span class="math inline">\(1\times 1\)</span>, <span class="math inline">\(\partial y/\partial x\)</span> is the (scalar) partial derivative of <span class="math inline">\(y\)</span> with respect to <span class="math inline">\(x\)</span>.</p></li>
+<li><p>Scalar-by-vector: For <span class="math inline">\({\bf x}\)</span> of size <span class="math inline">\(n\times 1\)</span> and <span class="math inline">\(y\)</span> of size <span class="math inline">\(1\times 1\)</span>, <span class="math inline">\(\partial y/\partial {\bf x}\)</span> (also written <span class="math inline">\(\nabla_{\bf x}y\)</span>, the gradient of <span class="math inline">\(y\)</span> with respect to <span class="math inline">\({\bf x}\)</span>) is a column vector of size <span class="math inline">\(n\times 1\)</span> with the <span class="math inline">\(i^{\rm th}\)</span> entry <span class="math inline">\(\partial y/\partial x_i\)</span>:</p></li>
+</ul>
+<p><span class="math display">\[\begin{aligned}
+              \partial y/\partial {\bf x}=
+              \begin{bmatrix}
+                \partial y/\partial x_1 \\ \partial y/\partial x_2 \\ \vdots \\ \partial y/\partial x_n
+              \end{bmatrix}.
+\end{aligned}\]</span></p>
+<ul>
+<li>Vector-by-scalar: For <span class="math inline">\(x\)</span> of size <span class="math inline">\(1\times 1\)</span> and <span class="math inline">\({\bf y}\)</span> of size <span class="math inline">\(m\times 1\)</span>, <span class="math inline">\(\partial {\bf y}/\partial x\)</span> is a row vector of size <span class="math inline">\(1 \times m\)</span> with the <span class="math inline">\(j^{\rm th}\)</span> entry <span class="math inline">\(\partial {\bf y}_j/\partial x\)</span>:</li>
+</ul>
+<p><span class="math display">\[\begin{aligned}
+\partial {\bf y}/\partial x=
+\begin{bmatrix}
+  \partial y_1/\partial x &amp; \partial y_2/\partial x &amp; \cdots &amp; \partial y_m/\partial x
+\end{bmatrix}.
+\end{aligned}\]</span></p>
+<ul>
+<li>Vector-by-vector: For <span class="math inline">\({\bf x}\)</span> of size <span class="math inline">\(n\times 1\)</span> and <span class="math inline">\({\bf y}\)</span> of size <span class="math inline">\(m\times 1\)</span>, <span class="math inline">\(\partial {\bf y}/\partial {\bf x}\)</span> is a matrix of size <span class="math inline">\(n\times m\)</span> with the <span class="math inline">\((i, j)\)</span> entry <span class="math inline">\(\partial y_j/\partial x_i\)</span>:</li>
+</ul>
+<p><span class="math display">\[\begin{aligned}
+\partial {\bf y}/\partial {\bf x}=
+\begin{bmatrix}
+  \partial y_1/\partial x_1 &amp; \partial y_2/\partial x_1 &amp; \cdots &amp; \partial y_m/\partial x_1 \\
+  \partial y_1/\partial x_2 &amp; \partial y_2/\partial x_2 &amp; \cdots &amp; \partial y_m/\partial x_2 \\
+  \vdots                    &amp; \vdots                    &amp; \ddots &amp; \vdots                    \\
+  \partial y_1/\partial x_n &amp; \partial y_2/\partial x_n &amp; \cdots &amp; \partial y_m/\partial x_n \\
+\end{bmatrix}.
+\end{aligned}\]</span></p>
+<ul>
+<li>Scalar-by-matrix: For <span class="math inline">\({\bf X}\)</span> of size <span class="math inline">\(n\times m\)</span> and <span class="math inline">\(y\)</span> of size <span class="math inline">\(1\times 1\)</span>, <span class="math inline">\(\partial y/\partial {\bf X}\)</span> (also written <span class="math inline">\(\nabla_{\bf X}y\)</span>, the gradient of <span class="math inline">\(y\)</span> with respect to <span class="math inline">\({\bf X}\)</span>) is a matrix of size <span class="math inline">\(n\times m\)</span> with the <span class="math inline">\((i, j)\)</span> entry <span class="math inline">\(\partial y/\partial X_{i, j}\)</span>:</li>
+</ul>
+<p><span class="math display">\[\begin{aligned}
+\partial y/\partial {\bf X}=
+\begin{bmatrix}
+  \partial y/\partial X_{1,1} &amp; \cdots &amp; \partial y/\partial X_{1,m} \\
+  \vdots                      &amp; \ddots &amp; \vdots                      \\
+  \partial y/\partial X_{n,1} &amp; \cdots &amp; \partial y/\partial X_{n,m} \\
+\end{bmatrix}.
+\end{aligned}\]</span></p>
+<p>You may notice that in this list, we have not included matrix-by-matrix, matrix-by-vector, or vector-by-matrix derivatives. This is because, generally, they cannot be expressed nicely in matrix form and require higher order objects (e.g., tensors) to represent their derivatives. These cases are beyond the scope of this course.</p>
+<p>Additionally, notice that for all cases, you can explicitly compute each element of the derivative object using (scalar) partial derivatives. You may find it useful to work through some of these by hand as you are reviewing matrix derivatives.</p>
+</section>
+<section id="examples" class="level2">
+<h2 class="anchored" data-anchor-id="examples">Examples</h2>
+<section id="example-1---simple-numerical-example" class="level3">
+<h3 class="anchored" data-anchor-id="example-1---simple-numerical-example">Example 1 - Simple Numerical Example</h3>
+<p>Let us calculate the derivative of <span class="math inline">\(f(\theta) = \theta_1^2 - 3\theta_2 + 5\)</span>. The input is a vector of size 2, and the output is a scalar. Therefore, our derivative <span class="math inline">\(\frac{df}{d\theta}\)</span> will be of size <span class="math inline">\((2 \times 1)\)</span>. More specifically, we know that:</p>
+<p><span class="math display">\[
+\frac{df}{d\theta} =
+\begin{bmatrix}
+\frac{df}{d\theta_1} \\
+\frac{df}{d\theta_2}
+\end{bmatrix}
+=
+\begin{bmatrix}
+2\theta_1 \\
+-3
+\end{bmatrix}
+\]</span></p>
+</section>
+<section id="example-2-ftheta-xtheta" class="level3">
+<h3 class="anchored" data-anchor-id="example-2-ftheta-xtheta">Example 2: <span class="math inline">\(f(\theta) = X\theta\)</span></h3>
+<p>We begin with a very simple function: <span class="math inline">\(f(\theta) = X\theta\)</span>. <span class="math inline">\(f\)</span> takes in a vector <span class="math inline">\(\theta\)</span> of size <span class="math inline">\((n \times 1)\)</span>, multiplies by a matrix <span class="math inline">\(X\)</span> of size <span class="math inline">\((m \times n)\)</span>, and thus returns a vector of size <span class="math inline">\((m \times 1)\)</span>. Let us calculate <span class="math inline">\(\frac{df}{d\theta}\)</span>:</p>
+<p><span class="math display">\[
+\begin{align*}
+df &amp;= f(\theta + d\theta) - f(\theta) \\
+   &amp;= X(\theta + d\theta) - X\theta \\
+   &amp;= X\theta + Xd\theta - X\theta \\
+   &amp;= Xd\theta
+\end{align*}
+\]</span></p>
+<p>This exactly matches our standard denominator layout form:</p>
+<p><span class="math display">\[
+df = \frac{df}{d\theta}^T d\theta
+\]</span></p>
+<p>where:</p>
+<p><span class="math display">\[
+\frac{df}{d\theta} = X^T
+\]</span></p>
+<p>Done!</p>
+</section>
+<section id="example-3-fv-v2" class="level3">
+<h3 class="anchored" data-anchor-id="example-3-fv-v2">Example 3: <span class="math inline">\(f(v) = ||v||^2\)</span></h3>
+<p>Note that <span class="math inline">\(f\)</span> maps a column vector of size <span class="math inline">\(n\)</span> to a scalar. Therefore, the derivative <span class="math inline">\(\frac{df}{dv}\)</span> will be of size <span class="math inline">\((n \times 1)\)</span>. There are two ways to calculate this:</p>
+<section id="old-approach" class="level4">
+<h4 class="anchored" data-anchor-id="old-approach">Old Approach</h4>
+<p>Take the partial derivatives at each index.</p>
+<p><span class="math display">\[
+\frac{df}{dv} =
+\begin{bmatrix}
+\frac{df}{dv_1} \\
+\vdots \\
+\frac{df}{dv_n}
+\end{bmatrix}
+=
+\begin{bmatrix}
+2v_1 \\
+\vdots \\
+2v_n
+\end{bmatrix}
+= 2v
+\]</span></p>
+</section>
+<section id="new-approach" class="level4">
+<h4 class="anchored" data-anchor-id="new-approach">New Approach</h4>
+<p>Let us use matrix calculus and the differential notation.</p>
+<p><span class="math display">\[
+\begin{align*}
+df &amp;= f(v + dv) - f(v) \\
+   &amp;= ||(v + dv)||^2 - ||v||^2 \\
+   &amp;= (v + dv)^T(v + dv) - ||v||^2 \\
+   &amp;= ||v||^2 + v^T dv + (dv)^T v + ||dv||^2 - ||v||^2 \\
+   &amp;= (2v)^T dv + ||dv||^2
+\end{align*}
+\]</span></p>
+<p>Just like in single-variable calculus, we can drop the squared <span class="math inline">\(dv\)</span> term since it grows smaller much faster than our linear <span class="math inline">\(dv\)</span> term.</p>
+<p>Thus we are left with</p>
+<p><span class="math display">\[
+df = (2v)^T dv
+\]</span></p>
+<p>Comparing this to our standard form:</p>
+<p><span class="math display">\[
+df = \frac{df}{dv}^T dv
+\]</span></p>
+<p>we see clearly that</p>
+<p><span class="math display">\[
+\frac{df}{dv} = 2v
+\]</span></p>
+</section>
+</section>
+<section id="example-4---chain-rule" class="level3">
+<h3 class="anchored" data-anchor-id="example-4---chain-rule">Example 4 - Chain Rule</h3>
+<p>This is where the advantage of matrix calculus—and more specifically the denominator layout—really shines.</p>
+<p>Let us assume we have a composition of functions <span class="math inline">\(f(g(x))\)</span>. We want to calculate the derivative of <span class="math inline">\(f\)</span> with respect to <span class="math inline">\(x\)</span>. As a first step, let’s just look at how <span class="math inline">\(f\)</span> changes with respect to <span class="math inline">\(g\)</span>:</p>
+<p><span class="math display">\[
+df = \frac{df}{dg}^T \cdot dg
+\]</span></p>
+<p>Now we also know how <span class="math inline">\(dg\)</span> changes with respect to <span class="math inline">\(dx\)</span>, so we can substitute that in:</p>
+<p><span class="math display">\[
+df = \frac{df}{dg}^T \cdot \left(\frac{dg}{dx}^T \cdot dx\right)
+\]</span></p>
+<p>Simplifying gives:</p>
+<p><span class="math display">\[
+\begin{align*}
+df &amp;= \frac{df}{dg}^T \cdot \left(\frac{dg}{dx}^T \cdot dx\right) \\
+   &amp;= \left(\frac{df}{dg}^T \cdot \frac{dg}{dx}^T\right) \cdot dx \\
+   &amp;= \left(\frac{dg}{dx} \cdot \frac{df}{dg}\right)^T \cdot dx
+\end{align*}
+\]</span></p>
+<p>Comparing this to our standard form gives:</p>
+<p><span class="math display">\[
+\frac{df}{dx} = \frac{dg}{dx} \cdot \frac{df}{dg}
+\]</span></p>
+<p><strong>Important</strong>: Notice how the products go inner → outer as we move from left → right. This will be the general pattern as we compose more and more functions. The innermost derivatives will be on the left, and the outermost will be on the right. This is super important. In general, matrix multiplication is not commutative and the dimensions won’t even work out if you try it any other way.</p>
+<p>For example, if we had <span class="math inline">\(f(g(h(x)))\)</span>, then:</p>
+<p><span class="math display">\[
+\frac{df}{dx} = \frac{dh}{dx} \cdot \frac{dg}{dh} \cdot \frac{df}{dg}
+\]</span></p>
+<p>Check for yourself that the dimensions will work out if we multiply in this way!</p>
+</section>
+</section>
+<section id="vector-by-vector-identities" class="level2">
+<h2 class="anchored" data-anchor-id="vector-by-vector-identities">Vector-by-vector Identities</h2>
+<p>In this section, we collect useful identities for <span class="math inline">\(\partial {\bf y}/ \partial {\bf x}\)</span>. In each case, assume <span class="math inline">\({\bf x}\)</span> is <span class="math inline">\(n \times 1\)</span>, <span class="math inline">\({\bf y}\)</span> is <span class="math inline">\(m \times 1\)</span>, <span class="math inline">\(a\)</span> is a scalar constant, <span class="math inline">\({\bf a}\)</span> is a vector that does not depend on <span class="math inline">\({\bf x}\)</span> and <span class="math inline">\({\bf A}\)</span> is a matrix that does not depend on <span class="math inline">\({\bf x}\)</span>, <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> are scalars that do depend on <span class="math inline">\({\bf x}\)</span>, and <span class="math inline">\({\bf u}\)</span> and <span class="math inline">\({\bf v}\)</span> are vectors that do depend on <span class="math inline">\({\bf x}\)</span>. We also have vector-valued functions <span class="math inline">\({\bf f}\)</span> and <span class="math inline">\({\bf g}\)</span>.</p>
+<section id="some-fundamental-cases" class="level3">
+<h3 class="anchored" data-anchor-id="some-fundamental-cases">Some Fundamental Cases</h3>
+<p>First, we will cover a couple of fundamental cases: suppose that <span class="math inline">\({\bf a}\)</span> is an <span class="math inline">\(m \times 1\)</span> vector which is not a function of <span class="math inline">\({\bf x}\)</span>, an <span class="math inline">\(n\times1\)</span> vector. Then,</p>
+<p><span id="eq-const"><span class="math display">\[
+\frac{\partial {\bf a}}{\partial {\bf x}} = {\bf 0},
+\tag{1}\]</span></span></p>
+<p>is an <span class="math inline">\(n \times m\)</span> matrix of 0s. This is similar to the scalar case of differentiating a constant. Next, we can consider the case of differentiating a vector with respect to itself:</p>
+<p><span class="math display">\[
+\frac{\partial {\bf x}}{\partial {\bf x}} = {\bf I}
+\]</span></p>
+<p>This is the <span class="math inline">\(n \times n\)</span> identity matrix, with 1’s along the diagonal and 0’s elsewhere. It makes sense, because <span class="math inline">\(\partial {\bf x}_j / {\bf x}_i\)</span> is 1 for <span class="math inline">\(i = j\)</span> and 0 otherwise. This identity is also similar to the scalar case.</p>
+</section>
+<section id="derivatives-involving-a-constant-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="derivatives-involving-a-constant-matrix">Derivatives Involving a Constant Matrix</h3>
+<p>Let the dimensions of <span class="math inline">\({\bf A}\)</span> be <span class="math inline">\(m \times n\)</span>. Then the object <span class="math inline">\({\bf A}{\bf x}\)</span> is an <span class="math inline">\(m\times 1\)</span> vector. We can then compute the derivative of <span class="math inline">\({\bf A}{\bf x}\)</span> with respect to <span class="math inline">\({\bf x}\)</span> as:</p>
+<p><span class="math display">\[\frac{\partial {\bf A}{\bf x}}{\partial {\bf x}} = \begin{bmatrix}
+  \partial ({\bf A}{\bf x})_1/\partial x_1 &amp; \partial ({\bf A}{\bf x})_2/\partial x_1 &amp; \cdots &amp; \partial ({\bf A}{\bf x})_m/\partial x_1 \\
+  \partial ({\bf A}{\bf x})_1/\partial x_2 &amp; \partial ({\bf A}{\bf x})_2/\partial x_2 &amp; \cdots &amp; \partial ({\bf A}{\bf x})_m/\partial x_2 \\
+  \vdots                            &amp; \vdots                            &amp; \ddots &amp; \vdots                            \\
+  \partial ({\bf A}{\bf x})_1/\partial x_n &amp; \partial ({\bf A}{\bf x})_2/\partial x_n &amp; \cdots &amp; \partial ({\bf A}{\bf x})_m/\partial x_n \\
+  \end{bmatrix}\]</span></p>
+<p>Note that any element of the column vector <span class="math inline">\({\bf A}{\bf x}\)</span> can be written as, for <span class="math inline">\(j = 1, \ldots, m\)</span>:</p>
+<p><span class="math display">\[({\bf A}{\bf x})_j = \sum_{k=1}^n A_{j,k} x_k.\]</span></p>
+<p>Thus, computing the <span class="math inline">\((i,j)\)</span> entry of <span class="math inline">\(\frac{\partial {\bf A}{\bf x}}{\partial {\bf x}}\)</span> requires computing the partial derivative <span class="math inline">\(\partial ({\bf A}{\bf x})_j/\partial x_i:\)</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+\partial ({\bf A}{\bf x})_j/\partial x_i = \partial \left( \sum_{k=1}^n A_{j,k} x_k \right)/ \partial x_i = A_{j,i}
+\end{aligned}
+\]</span></p>
+<p>Therefore, the <span class="math inline">\((i,j)\)</span> entry of <span class="math inline">\(\frac{\partial {\bf A}{\bf x}}{\partial {\bf x}}\)</span> is the <span class="math inline">\((j,i)\)</span> entry of <span class="math inline">\({\bf A}\)</span>:</p>
+<p><span id="eq-Ax"><span class="math display">\[\frac{\partial {\bf A}{\bf x}}{\partial {\bf x}} = {\bf A}^T \tag{2}\]</span></span></p>
+<p>Similarly, for objects <span class="math inline">\({\bf x}, {\bf A}\)</span> of the same shape, one can obtain,</p>
+<p><span id="eq-xTA"><span class="math display">\[\frac{\partial {\bf x}^T {\bf A}}{\partial {\bf x}} = {\bf A}
+\tag{3}\]</span></span></p>
+</section>
+<section id="linearity-of-derivatives" class="level3">
+<h3 class="anchored" data-anchor-id="linearity-of-derivatives">Linearity of Derivatives</h3>
+<p>Suppose that <span class="math inline">\({\bf u}, {\bf v}\)</span> are both vectors of size <span class="math inline">\(m \times 1\)</span>. Then,</p>
+<p><span id="eq-uplusv"><span class="math display">\[\frac{\partial ({\bf u}+ {\bf v})}{\partial {\bf x}} = \frac{\partial
+    {\bf u}}{\partial {\bf x}} + \frac{\partial {\bf v}}{\partial {\bf x}}
+\tag{4}\]</span></span></p>
+<p>Suppose that <span class="math inline">\(a\)</span> is a scalar constant and <span class="math inline">\({\bf u}\)</span> is an <span class="math inline">\(m\times 1\)</span> vector that is a function of <span class="math inline">\({\bf x}\)</span>. Then,</p>
+<p><span class="math display">\[
+\frac{\partial a {\bf u}}{\partial {\bf x}} = a \frac{\partial {\bf u}}{ \partial {\bf x}}
+\]</span></p>
+<p>One can extend the previous identity to vector- and matrix-valued constants. Suppose that <span class="math inline">\({\bf a}\)</span> is a vector with shape <span class="math inline">\(m \times 1\)</span> and <span class="math inline">\(v\)</span> is a scalar which depends on <span class="math inline">\({\bf x}\)</span>. Then,</p>
+<p><span class="math display">\[\frac{\partial v {\bf a}}{\partial {\bf x}} = \frac{\partial
+    v}{\partial {\bf x}}{\bf a}^T
+\]</span></p>
+<p>First, checking dimensions, <span class="math inline">\(\partial v/\partial {\bf x}\)</span> is <span class="math inline">\(n \times 1\)</span> and <span class="math inline">\({\bf a}\)</span> is <span class="math inline">\(m \times 1\)</span> so <span class="math inline">\({\bf a}^T\)</span> is <span class="math inline">\(1 \times m\)</span> and our answer is <span class="math inline">\(n \times m\)</span> as it should be. Now, checking a value, element <span class="math inline">\((i,j)\)</span> of the answer is <span class="math inline">\(\partial v {\bf a}_j / \partial x_i\)</span> = <span class="math inline">\((\partial v / \partial x_i) {\bf a}_j\)</span> which corresponds to element <span class="math inline">\((i,j)\)</span> of <span class="math inline">\((\partial v / \partial {\bf x}){\bf a}^T\)</span>.</p>
+<p>Similarly, suppose that <span class="math inline">\({\bf A}\)</span> is a matrix which does not depend on <span class="math inline">\({\bf x}\)</span> and <span class="math inline">\({\bf u}\)</span> is a column vector which does depend on <span class="math inline">\({\bf x}\)</span>. Then,</p>
+<p><span class="math display">\[
+\frac{\partial {\bf A}{\bf u}}{\partial {\bf x}} = \frac{\partial
+    {\bf u}}{\partial {\bf x}}{\bf A}^T
+\]</span></p>
+</section>
+<section id="product-rule-vector-valued-numerator" class="level3">
+<h3 class="anchored" data-anchor-id="product-rule-vector-valued-numerator">Product Rule (Vector-valued Numerator)</h3>
+<p>Suppose that <span class="math inline">\(v\)</span> is a scalar which depends on <span class="math inline">\({\bf x}\)</span>, while <span class="math inline">\({\bf u}\)</span> is a column vector of shape <span class="math inline">\(m\times 1\)</span> and <span class="math inline">\({\bf x}\)</span> is a column vector of shape <span class="math inline">\(n \times 1\)</span>. Then,</p>
+<p><span class="math display">\[
+\frac{\partial v {\bf u}}{\partial {\bf x}} = v\frac{\partial
+    {\bf u}}{\partial {\bf x}} + \frac{\partial v}{\partial {\bf x}} {\bf u}^T
+\]</span></p>
+<p>One can see this relationship by expanding the derivative as follows:</p>
+<p><span class="math display">\[\begin{aligned}
+  \frac{\partial v {\bf u}}{\partial {\bf x}} =
+  \begin{bmatrix}
+    \partial (v u_1)/\partial x_1 &amp; \partial (v u_2)/\partial x_1 &amp; \cdots &amp; \partial (v u_m)/\partial x_1 \\
+    \partial (v u_1)/\partial x_2 &amp; \partial (v u_2)/\partial x_2 &amp; \cdots &amp; \partial (v u_m)/\partial x_2 \\
+    \vdots                        &amp; \vdots                        &amp; \ddots &amp; \vdots                        \\
+    \partial (v u_1)/\partial x_n &amp; \partial (v u_2)/\partial x_n &amp; \cdots &amp; \partial (v u_m)/\partial x_n \\
+  \end{bmatrix}.
+\end{aligned}
+\]</span></p>
+<p>Then, one can use the product rule for scalar-valued functions, <span class="math display">\[
+\begin{aligned}
+  \partial (v u_j)/\partial x_i = v (\partial u_j / \partial x_i) + (\partial v / \partial x_i) u_j,
+\end{aligned}
+\]</span> to obtain the desired result.</p>
+</section>
+<section id="chain-rule-identity" class="level3">
+<h3 class="anchored" data-anchor-id="chain-rule-identity">Chain Rule Identity</h3>
+<p>Suppose that <span class="math inline">\({\bf g}\)</span> is a vector-valued function with output vector of shape <span class="math inline">\(m \times 1\)</span>, and the argument to <span class="math inline">\({\bf g}\)</span> is a column vector <span class="math inline">\({\bf u}\)</span> of shape <span class="math inline">\(d\times 1\)</span> which depends on <span class="math inline">\({\bf x}\)</span>. Then, one can obtain the chain rule as,</p>
+<p><span class="math display">\[\frac{\partial {\bf g}({\bf u})}{\partial {\bf x}} = \frac{\partial
+    {\bf u}}{\partial {\bf x}}\frac{\partial {\bf g}({\bf u})}{\partial
+    {\bf u}}
+\]</span></p>
+<p>Following “the shapes of things,” <span class="math inline">\(\partial {\bf u}/ \partial {\bf x}\)</span> is <span class="math inline">\(n \times d\)</span> and <span class="math inline">\(\partial {\bf g}({\bf u}) / \partial {\bf u}\)</span> is <span class="math inline">\(d \times m\)</span>, where element <span class="math inline">\((i,j)\)</span> is <span class="math inline">\(\partial {\bf g}({\bf u})_j / \partial {\bf u}_i\)</span>. The same chain rule applies for further compositions of functions:</p>
+<p><span class="math display">\[
+\frac{\partial {\bf f}({\bf g}({\bf u}))}{\partial {\bf x}} = \frac{\partial
+    {\bf u}}{\partial {\bf x}}\frac{\partial {\bf g}({\bf u})}{\partial {\bf u}}
+  \frac{\partial {\bf f}({\bf g})}{\partial {\bf g}}
+\]</span></p>
+</section>
+<section id="some-other-identities" class="level3">
+<h3 class="anchored" data-anchor-id="some-other-identities">Some Other Identities</h3>
+<p>You can get many scalar-by-vector and vector-by-scalar cases as special cases of the rules above, making one of the relevant vectors just be 1 x 1. Here are some other ones that are handy. For more, see the Wikipedia article on Matrix derivatives (for consistency, only use the ones in <em>denominator layout</em>).</p>
+<p><span id="eq-uTv"><span class="math display">\[
+\frac{\partial {\bf u}^T {\bf v}}{\partial {\bf x}} = \frac{\partial
+    {\bf u}}{\partial {\bf x}} {\bf v}+ \frac{\partial {\bf v}}{\partial {\bf x}} {\bf u}
+\tag{5}\]</span></span></p>
+<p><span id="eq-uT"><span class="math display">\[\frac{\partial {\bf u}^T}{\partial x} = \big(\frac{\partial
+    {\bf u}}{\partial x}\big)^T
+\tag{6}\]</span></span></p>
+</section>
+</section>
+<section id="mse-for-linear-regression" class="level2">
+<h2 class="anchored" data-anchor-id="mse-for-linear-regression">MSE for Linear Regression</h2>
+<p>From lecture/recitation, we know that the Mean Squared Error for Linear Regression can be written as:</p>
+<p><span class="math display">\[
+J(\theta) = \frac{1}{n} ||X\theta - Y||^2
+\]</span></p>
+<p>where <span class="math inline">\(X\)</span> and <span class="math inline">\(\theta\)</span> are the augmented forms to allow for an intercept. Let us show how to optimize this function by setting its gradient equal to 0. We combine all of the facts that we learned. We know that the derivative of <span class="math inline">\(||v||^2\)</span> with respect to <span class="math inline">\(v\)</span> is <span class="math inline">\(2v\)</span>, the derivative of <span class="math inline">\(X\theta\)</span> with respect to <span class="math inline">\(\theta\)</span> is <span class="math inline">\(X^T\)</span>, and we know the chain rule. Combining all of that gives:</p>
+<p><span class="math display">\[
+\frac{dJ}{d\theta} = \frac{2}{n} X^T \cdot (X\theta - Y)
+\]</span></p>
+<p>Now, to optimize, we set the derivative equal to 0:</p>
+<p><span class="math display">\[
+\frac{dJ}{d\theta} = \frac{2}{n} X^T \cdot (X\theta - Y) = 0 \implies \theta^* = (X^TX)^{-1}X^TY
+\]</span></p>
+<p>That’s it! You can now derive the optimal solution for any linear regression problem.</p>
+</section>
+<section id="mse-for-regularized-linear-regression" class="level2">
+<h2 class="anchored" data-anchor-id="mse-for-regularized-linear-regression">MSE for Regularized Linear Regression</h2>
+<p>In lecture, we also encountered the regularized MSE expression for Linear Regression:</p>
+<p><span class="math display">\[
+J(\theta) = \frac{1}{n} ||X\theta - Y||^2 + \lambda || \theta ||^2
+\]</span></p>
+<p>where <span class="math inline">\(\lambda\)</span> is some scalar hyperparameter we can choose.</p>
+<p>Calculating this derivative is basically the same as last time, except there’s an additional squared term at the end that we can differentiate separately. Setting the derivative with respect to <span class="math inline">\(\theta\)</span> to 0, gives:</p>
+<p><span class="math display">\[
+\frac{dJ}{d\theta} = \frac{2}{n} X^T \cdot (X\theta^* - Y) + 2\lambda \theta^* = 0
+\]</span></p>
+<p>which simplifies to:</p>
+<p><span class="math display">\[
+0 = X^T X\theta^* - X^T Y + n\lambda \theta^*
+\]</span></p>
+<p>or</p>
+<p><span class="math display">\[
+\theta^* = (X^T X + n\lambda I)^{-1} X^T Y
+\]</span></p>
+</section>
+<section id="app:einstein" class="level2">
+<h2 class="anchored" data-anchor-id="app:einstein">Matrix Derivatives Using Einstein Summation</h2>
+<p><em>You do not have to read or learn this! But you might find it interesting or helpful.</em></p>
+<p>Consider the objective function for linear regression, written out as products of matrices:</p>
+<p><span class="math display">\[\begin{aligned}
+J(\theta) = \frac{1}{n} (X\theta - Y)^T (X\theta-Y)
+\,,
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(X\)</span> is <span class="math inline">\(n\times d\)</span>, <span class="math inline">\(Y\)</span> is <span class="math inline">\(n\times 1\)</span>, and <span class="math inline">\(\theta\)</span> is <span class="math inline">\(d\times 1\)</span>. How does one show, with no shortcuts, that</p>
+<p><span class="math display">\[\begin{aligned}
+\nabla_{\theta}J = \frac{2}{n} {X^T} {(X\theta - Y)} \;\;?
+\end{aligned}
+\]</span></p>
+<p>One neat way, which is very explicit, is to simply write all the matrices as variables with row and column indices, e.g., <span class="math inline">\(X_{ab}\)</span> is the row <span class="math inline">\(a\)</span>, column <span class="math inline">\(b\)</span> entry of the matrix <span class="math inline">\(X\)</span>. Furthermore, let us use the convention that in any product, all indices which appear more than once get summed over; this is a popular convention in theoretical physics, and lets us suppress all the summation symbols which would otherwise clutter the following expresssions. For example, <span class="math inline">\(X_{ab} \theta_b\)</span> would be the implicit summation notation giving the element at the <span class="math inline">\(a^{\rm th}\)</span> row of the matrix-vector product <span class="math inline">\(X\theta\)</span>.</p>
+<p>Using implicit summation notation with explicit indices, we can rewrite <span class="math inline">\(J(\theta)\)</span> as</p>
+<p><span class="math display">\[\begin{aligned}
+J(\theta) = \frac{1}{n} \left( X_{ab} \theta_b - Y_a \right)  \left( X_{ac}\theta_c - Y_a \right) \,.
+\end{aligned}\]</span></p>
+<p>Note that we no longer need the transpose on the first term, because all that transpose accomplished was to take a dot product between the vector given by the left term, and the vector given by the right term. With implicit summation, this is accomplished by the two terms sharing the repeated index <span class="math inline">\(a\)</span>.</p>
+<p>Taking the derivative of <span class="math inline">\(J\)</span> with respect to the <span class="math inline">\(d^{\rm th}\)</span> element of <span class="math inline">\(\theta\)</span> thus gives, using the chain rule for (ordinary scalar) multiplication:</p>
+<p><span class="math display">\[\begin{aligned}
+\frac{dJ}{d\theta_d} &amp;=&amp; \frac{1}{n} \left[
+  X_{ab} \delta_{bd} \left( X_{ac}\theta_c-Y_a \right)
+  + \left(X_{ab}\theta_b - Y_a \right) X_{ac} \delta_{cd}
+  \right]
+\\
+&amp;=&amp; \frac{1}{n} \left[
+  X_{ad} \left( X_{ac}\theta_c-Y_a \right)
+  + \left(X_{ab}\theta_b - Y_a \right) X_{ad}
+  \right]
+\\
+&amp;=&amp; \frac{2}{n} X_{ad} \left( X_{ab}\theta_b-Y_a \right)
+\,,
+\end{aligned}\]</span> where the second line follows from the first, with the definition that <span class="math inline">\(\delta_{bd} = 1\)</span> only when <span class="math inline">\(b=d\)</span> (and similarly for <span class="math inline">\(\delta_{cd}\)</span>). And the third line follows from the second by recognizing that the two terms in the second line are identical. Now note that in this implicit summation notation, the <span class="math inline">\(a, b\)</span> element of the matrix product of <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> is <span class="math inline">\((AB)_{ac} = A_{ab}B_{bc}\)</span>. That is, ordinary matrix multiplication sums over indices which are adjacent to each other, because a row of <span class="math inline">\(A\)</span> times a column of <span class="math inline">\(B\)</span> becomes a scalar number. So the term in the above equation with <span class="math inline">\(X_{ad} X_{ab}\)</span> is not a matrix product of <span class="math inline">\(X\)</span> with <span class="math inline">\(X\)</span>. However, taking the transpose <span class="math inline">\(X^T\)</span> switches row and column indices, so <span class="math inline">\(X_{ad} = X^T_{da}\)</span>. And <span class="math inline">\(X^T_{da} X_{ab}\)</span> <em>is</em> a matrix product of <span class="math inline">\(X^T\)</span> with <span class="math inline">\(X\)</span>! Thus, we have that</p>
+<p><span class="math display">\[\begin{aligned}
+\frac{dJ}{d\theta_d} =&amp; \frac{2}{n} X^T_{da} \left( X_{ab}\theta_b-Y_a \right)
+\\
+=&amp; \frac{2}{n} \left[ X^T \left( X\theta-Y\right) \right]_{d}
+\,,
+\end{aligned}
+\]</span> which is the desired result.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
