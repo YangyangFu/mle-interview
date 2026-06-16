@@ -1,0 +1,51 @@
+---
+title: "MLE Interview Prep"
+subtitle: "ML coding & problem-solving notes for machine-learning engineer interviews."
+toc: false
+---
+
+A collection of from-scratch implementations and notes covering the math,
+classical ML, deep learning, modern architectures, and production topics that
+commonly come up in machine-learning engineer interviews. Each page is a
+self-contained, runnable notebook.
+
+## Foundations
+
+- [Matrix Calculus](matrix_calculus.qmd) — derivatives, layouts, and the shapes of gradients
+- [Naive Bayes](naive-bayes.ipynb)
+- [Gaussian Mixture Models](gaussian-mixture.ipynb)
+
+## Classical ML
+
+- [Linear Regression](ml-coding/1-linear-regression.ipynb)
+- [Logistic Regression](ml-coding/2-logistic-regression.ipynb)
+- [Softmax Regression](ml-coding/3-softmax-regression.ipynb)
+- [K-Nearest Neighbors](ml-coding/4-knn.ipynb)
+- [Decision Tree](ml-coding/5-decision-tree.ipynb)
+- [K-Means](ml-coding/6-kmeans.ipynb)
+- [Principal Component Analysis](ml-coding/7-principal-component-analysis.ipynb)
+
+## Deep Learning
+
+- [Artificial Neural Networks](ml-coding/8-ann.ipynb)
+- [Convolution](ml-coding/9-convolution.ipynb)
+- [Basic Modules](ml-coding/10-deep-learning-basic.ipynb)
+- [Sampling Methods](ml-coding/11-sampling.ipynb)
+- [Loss Functions](ml-coding/12-loss-function.ipynb)
+- [Optimizers](ml-coding/13-optimizer.ipynb)
+- [Training Loops](ml-coding/14-training.ipynb)
+
+## Architectures & Generative Models
+
+- [Transformer](ml-coding/15-transformer.ipynb)
+- [LLaMA](ml-coding/16-llama.ipynb)
+- [Diffusion & Flow Matching](ml-coding/17-diffusion.ipynb)
+- [VQ-VAE](ml-coding/18-vq-vae.ipynb)
+- [Reinforcement Learning](ml-coding/19-reinforcement-learning.ipynb)
+
+## Evaluation & Production
+
+- [Metrics](ml-coding/20-metrics.ipynb)
+- [Ensemble Learning](ml-coding/21-ensembling.ipynb)
+- [Deployment Basics](ml-coding/22-deployment-basics.ipynb)
+- [Distributed Training Pipeline](ml-coding/23-distributed-training-pipeline.ipynb)

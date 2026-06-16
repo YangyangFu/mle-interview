@@ -1,0 +1,110 @@
+project:
+  type: website
+  output-dir: docs
+
+# Notebooks ship with their stored outputs; don't re-execute heavy
+# (torch / distributed) code at render time.
+execute:
+  enabled: false
+
+website:
+  title: "MLE Interview Prep"
+  description: "ML coding & problem-solving notes for machine-learning engineer interviews."
+  search:
+    location: sidebar
+    type: textbox
+  page-navigation: true
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: matrix_calculus.qmd
+        text: Foundations
+      - text: ML Coding
+        href: ml-coding/1-linear-regression.ipynb
+    tools:
+      - icon: github
+        href: https://github.com/
+  sidebar:
+    style: docked
+    search: true
+    contents:
+      - href: index.qmd
+        text: Overview
+      - section: "Foundations"
+        contents:
+          - href: matrix_calculus.qmd
+            text: Matrix Calculus
+          - href: naive-bayes.ipynb
+            text: Naive Bayes
+          - href: gaussian-mixture.ipynb
+            text: Gaussian Mixture Models
+      - section: "Classical ML"
+        contents:
+          - href: ml-coding/1-linear-regression.ipynb
+            text: Linear Regression
+          - href: ml-coding/2-logistic-regression.ipynb
+            text: Logistic Regression
+          - href: ml-coding/3-softmax-regression.ipynb
+            text: Softmax Regression
+          - href: ml-coding/4-knn.ipynb
+            text: K-Nearest Neighbors
+          - href: ml-coding/5-decision-tree.ipynb
+            text: Decision Tree
+          - href: ml-coding/6-kmeans.ipynb
+            text: K-Means
+          - href: ml-coding/7-principal-component-analysis.ipynb
+            text: Principal Component Analysis
+      - section: "Deep Learning"
+        contents:
+          - href: ml-coding/8-ann.ipynb
+            text: Artificial Neural Networks
+          - href: ml-coding/9-convolution.ipynb
+            text: Convolution
+          - href: ml-coding/10-deep-learning-basic.ipynb
+            text: Basic Modules
+          - href: ml-coding/11-sampling.ipynb
+            text: Sampling Methods
+          - href: ml-coding/12-loss-function.ipynb
+            text: Loss Functions
+          - href: ml-coding/13-optimizer.ipynb
+            text: Optimizers
+          - href: ml-coding/14-training.ipynb
+            text: Training Loops
+      - section: "Architectures & Generative Models"
+        contents:
+          - href: ml-coding/15-transformer.ipynb
+            text: Transformer
+          - href: ml-coding/16-llama.ipynb
+            text: LLaMA
+          - href: ml-coding/17-diffusion.ipynb
+            text: Diffusion & Flow Matching
+          - href: ml-coding/18-vq-vae.ipynb
+            text: VQ-VAE
+          - href: ml-coding/19-reinforcement-learning.ipynb
+            text: Reinforcement Learning
+      - section: "Evaluation & Production"
+        contents:
+          - href: ml-coding/20-metrics.ipynb
+            text: Metrics
+          - href: ml-coding/21-ensembling.ipynb
+            text: Ensemble Learning
+          - href: ml-coding/22-deployment-basics.ipynb
+            text: Deployment Basics
+          - href: ml-coding/23-distributed-training-pipeline.ipynb
+            text: Distributed Training Pipeline
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+    code-copy: true
+    highlight-style: github
+    html-math-method: katex
+    grid:
+      sidebar-width: 320px

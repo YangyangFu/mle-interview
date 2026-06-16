@@ -1,4 +1,6 @@
-# Matrix Calculus {#sec-matrix-calculus}
+---
+title: "Matrix Calculus"
+---
 
 ## Single-variable Calculus
 
