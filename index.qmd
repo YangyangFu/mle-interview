@@ -9,43 +9,56 @@ classical ML, deep learning, modern architectures, and production topics that
 commonly come up in machine-learning engineer interviews. Each page is a
 self-contained, runnable notebook.
 
+**Notion**
+
+We use the following conventions when derving the mathematical expressions in these notes:
+
+- scalars are denoted with lowercase letters (e.g., $x$)
+- column vectors are denoted with lowercase bold letters (e.g., $\bf x$)
+- matrices are denoted with uppercase bold letters (e.g., $\bf X$)
+- Jacobian matrix such as $\frac{d \bf y}{d \bf x}$ is in denominator layout. That means, if $\bf y$ is a $m \times 1$ vector and $\bf x$ is a $n \times 1$ vector, then the Jacobian matrix will be a $n \times m$ matrix. The input $\bf x$ determines the rows in the derivative, and the output $\bf y$ determines the columns in the derivative. 
+
 ## Foundations
 
-- [Matrix Calculus](matrix_calculus.qmd) — derivatives, layouts, and the shapes of gradients
-- [Naive Bayes](naive-bayes.ipynb)
-- [Gaussian Mixture Models](gaussian-mixture.ipynb)
+- [Matrix Calculus](ml-coding/foundations/matrix_calculus.qmd) — derivatives, layouts, and the shapes of gradients
 
 ## Classical ML
 
-- [Linear Regression](ml-coding/1-linear-regression.ipynb)
-- [Logistic Regression](ml-coding/2-logistic-regression.ipynb)
-- [Softmax Regression](ml-coding/3-softmax-regression.ipynb)
-- [K-Nearest Neighbors](ml-coding/4-knn.ipynb)
-- [Decision Tree](ml-coding/5-decision-tree.ipynb)
-- [K-Means](ml-coding/6-kmeans.ipynb)
-- [Principal Component Analysis](ml-coding/7-principal-component-analysis.ipynb)
+- [Linear Regression](ml-coding/classical-ml/linear-regression.ipynb)
+- [Logistic Regression](ml-coding/classical-ml/logistic-regression.ipynb)
+- [Softmax Regression](ml-coding/classical-ml/softmax-regression.ipynb)
+- [K-Nearest Neighbors](ml-coding/classical-ml/knn.ipynb)
+- [Decision Tree](ml-coding/classical-ml/decision-tree.ipynb)
+- [K-Means](ml-coding/classical-ml/kmeans.ipynb)
+- [Principal Component Analysis](ml-coding/classical-ml/principal-component-analysis.ipynb)
+- [Naive Bayes](ml-coding/classical-ml/naive-bayes.ipynb)
+- [Gaussian Mixture Models](ml-coding/classical-ml/gaussian-mixture.ipynb)
 
 ## Deep Learning
 
-- [Artificial Neural Networks](ml-coding/8-ann.ipynb)
-- [Convolution](ml-coding/9-convolution.ipynb)
-- [Basic Modules](ml-coding/10-deep-learning-basic.ipynb)
-- [Sampling Methods](ml-coding/11-sampling.ipynb)
-- [Loss Functions](ml-coding/12-loss-function.ipynb)
-- [Optimizers](ml-coding/13-optimizer.ipynb)
-- [Training Loops](ml-coding/14-training.ipynb)
+- [Artificial Neural Networks](ml-coding/deep-learning/ann.ipynb)
+- [Convolution](ml-coding/deep-learning/convolution.ipynb)
+- [Basic Modules](ml-coding/deep-learning/deep-learning-basic.ipynb)
+- [Sampling Methods](ml-coding/deep-learning/sampling.ipynb)
+- [Loss Functions](ml-coding/deep-learning/loss-function.ipynb)
+- [Optimizers](ml-coding/deep-learning/optimizer.ipynb)
+- [Training Loops](ml-coding/deep-learning/training.ipynb)
 
-## Architectures & Generative Models
+## Reinforcement Learning
+- [Reinforcement Learning](ml-coding/reinforcement-learning/reinforcement-learning.ipynb)
 
-- [Transformer](ml-coding/15-transformer.ipynb)
-- [LLaMA](ml-coding/16-llama.ipynb)
-- [Diffusion & Flow Matching](ml-coding/17-diffusion.ipynb)
-- [VQ-VAE](ml-coding/18-vq-vae.ipynb)
-- [Reinforcement Learning](ml-coding/19-reinforcement-learning.ipynb)
+## LLMs
+- [Transformer](ml-coding/llms/transformer.ipynb)
+- [LLaMA](ml-coding/llms/llama.ipynb)
 
-## Evaluation & Production
+## Generative Models
+- [Diffusion & Flow Matching](ml-coding/generative-models/diffusion.ipynb)
+- [VQ-VAE](ml-coding/generative-models/vq-vae.ipynb)
 
-- [Metrics](ml-coding/20-metrics.ipynb)
-- [Ensemble Learning](ml-coding/21-ensembling.ipynb)
-- [Deployment Basics](ml-coding/22-deployment-basics.ipynb)
-- [Distributed Training Pipeline](ml-coding/23-distributed-training-pipeline.ipynb)
+## Applied ML
+- [Ensemble Learning](ml-coding/applied-ml/ensembling.ipynb)
+- [Deployment Basics](ml-coding/applied-ml/deployment-basics.ipynb)
+- [Distributed Training Pipeline](ml-coding/applied-ml/distributed-training-pipeline.ipynb)
+
+## AD/Robotics
+- [Metrics](ml-coding/ad-robotics/metrics.ipynb)
